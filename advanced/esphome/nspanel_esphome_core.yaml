@@ -1813,8 +1813,16 @@ script:
           if (relay_2->state) disp1->set_component_text_printf("home.icon_top_02", "%s", id(home_relay2_icon).c_str());
             else disp1->set_component_text_printf("home.icon_top_02", "\uFFFF");
           // Hardware buttons - Fallback mode
-          if (relay1_local->state) disp1->send_command_printf("home.left_bt_pic.val=%i", (relay_1->state) ? 1 : 0);
-          if (relay2_local->state) disp1->send_command_printf("home.right_bt_pic.val=%i", (relay_2->state) ? 1 : 0);
+          if (relay1_local->state) {
+            disp1->send_command_printf("home.left_bt_pic.val=%i", (relay_1->state) ? 1 : 0);
+            disp1->send_command_printf("buttonpage01.left_bt_pic.val=%i", (relay_1->state) ? 1 : 0);
+            disp1->send_command_printf("entitypage01.left_bt_pic.val=%i", (relay_1->state) ? 1 : 0);
+          }
+          if (relay2_local->state) {
+            disp1->send_command_printf("home.right_bt_pic.val=%i", (relay_2->state) ? 1 : 0);
+            disp1->send_command_printf("buttonpage01.right_bt_pic.val=%i", (relay_2->state) ? 1 : 0);
+            disp1->send_command_printf("entitypage01.right_bt_pic.val=%i", (relay_2->state) ? 1 : 0);
+          }
 
   - id: refresh_wifi_icon
     mode: restart
