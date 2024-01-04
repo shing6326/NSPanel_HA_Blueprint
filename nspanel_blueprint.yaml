@@ -6967,10 +6967,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: >
-                                    home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
-                                    buttonpage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
-                                    entitypage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
                                 continue_on_error: true
 
                           ##### NSPanel Right Button Name #####
@@ -6999,10 +6996,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: >
-                                    home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
-                                    buttonpage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
-                                    entitypage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
                                 continue_on_error: true
 
                           ###### Custom buttons ######
@@ -7784,6 +7778,70 @@ action:
                                   component: '255' #all
                                 continue_on_error: true
 
+                          ##### NSPanel Buttons #####
+                          - *variables_hardware
+                          - variables:
+                              left_button_state: '{{ states(hardware.buttons.left.entity) | default("unavailable") if hardware.buttons.left.entity is string else "unavailable" }}'
+                              right_button_state: '{{ states(hardware.buttons.right.entity) | default("unavailable") if hardware.buttons.right.entity is string else "unavailable" }}'
+
+                          ##### NSPanel Left Button Name #####
+                          - if: '{{ hardware.buttons.left.name | length > 0 }}'
+                            then:
+                              ### LABEL Font Color ###
+                              - *delay-default
+                              - service: '{{ nextion.command.set_component_color }}'
+                                data:
+                                  component: buttonpage01.left_bt_text
+                                  foreground: '{{ [ hardware.buttons.left.color_rgb ] if is_number(hardware.buttons.left.color_rgb) else hardware.buttons.left.color_rgb }}'
+                                  background: []
+                                continue_on_error: true
+                              ### LABEL Font ###
+                              - *delay-default
+                              - service: '{{ nextion.command.text_printf }}'
+                                data:
+                                  component: buttonpage01.left_bt_text
+                                  message: '{{ hardware.buttons.left.name }}'
+                                continue_on_error: true
+
+                          ##### SET Left Hardware Button PIC on Button Page ####
+                          - if: '{{ left_button_state not in ["unavailable", "unknown", "", None] }}'
+                            then:
+                                  # Hardware Button PIC
+                              - *delay-default
+                              - service: '{{ nextion.command.printf }}'
+                                data:
+                                  cmd: buttonpage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                continue_on_error: true
+
+                          ##### NSPanel Right Button Name #####
+                          - if: '{{ hardware.buttons.right.name | length > 0 }}'
+                            then:
+                              ### LABEL Font Color ###
+                              - *delay-default
+                              - service: '{{ nextion.command.set_component_color }}'
+                                data:
+                                  component: buttonpage01.right_bt_text
+                                  foreground: '{{ [ hardware.buttons.right.color_rgb ] if is_number(hardware.buttons.right.color_rgb) else hardware.buttons.right.color_rgb }}'
+                                  background: []
+                                continue_on_error: true
+                              ### LABEL Font ###
+                              - *delay-default
+                              - service: '{{ nextion.command.text_printf }}'
+                                data:
+                                  component: buttonpage01.right_bt_text
+                                  message: '{{ hardware.buttons.right.name }}'
+                                continue_on_error: true
+
+                          ##### SET Right Hardware Button PIC on Button Page #####
+                          - if: '{{ right_button_state not in ["unavailable", "unknown", "", None] }}'
+                            then:
+                              # Hardware Button PIC
+                              - *delay-default
+                              - service: '{{ nextion.command.printf }}'
+                                data:
+                                  cmd: buttonpage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                continue_on_error: true
+
                       ## PAGE LIGHT ##
                       - alias: Light settings page
                         conditions: '{{ nspanel_event.page == page.light }}'
@@ -8550,6 +8608,70 @@ action:
                                         ent_value: '{{ repeat_item_state ~ ((state_attr(repeat.item.entity, "unit_of_measurement") | default("")) if state_attr(repeat.item.entity, "unit_of_measurement") is string else "") }}'
                                         ent_value_xcen: '{{ entitypages_value_alignment }}'
                                       continue_on_error: true
+
+                          ##### NSPanel Buttons #####
+                          - *variables_hardware
+                          - variables:
+                              left_button_state: '{{ states(hardware.buttons.left.entity) | default("unavailable") if hardware.buttons.left.entity is string else "unavailable" }}'
+                              right_button_state: '{{ states(hardware.buttons.right.entity) | default("unavailable") if hardware.buttons.right.entity is string else "unavailable" }}'
+
+                          ##### NSPanel Left Button Name #####
+                          - if: '{{ hardware.buttons.left.name | length > 0 }}'
+                            then:
+                              ### LABEL Font Color ###
+                              - *delay-default
+                              - service: '{{ nextion.command.set_component_color }}'
+                                data:
+                                  component: entitypage01.left_bt_text
+                                  foreground: '{{ [ hardware.buttons.left.color_rgb ] if is_number(hardware.buttons.left.color_rgb) else hardware.buttons.left.color_rgb }}'
+                                  background: []
+                                continue_on_error: true
+                              ### LABEL Font ###
+                              - *delay-default
+                              - service: '{{ nextion.command.text_printf }}'
+                                data:
+                                  component: entitypage01.left_bt_text
+                                  message: '{{ hardware.buttons.left.name }}'
+                                continue_on_error: true
+
+                          ##### SET Left Hardware Button PIC on Entity Page ####
+                          - if: '{{ left_button_state not in ["unavailable", "unknown", "", None] }}'
+                            then:
+                                  # Hardware Button PIC
+                              - *delay-default
+                              - service: '{{ nextion.command.printf }}'
+                                data:
+                                  cmd: entitypage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                continue_on_error: true
+
+                          ##### NSPanel Right Button Name #####
+                          - if: '{{ hardware.buttons.right.name | length > 0 }}'
+                            then:
+                              ### LABEL Font Color ###
+                              - *delay-default
+                              - service: '{{ nextion.command.set_component_color }}'
+                                data:
+                                  component: entitypage01.right_bt_text
+                                  foreground: '{{ [ hardware.buttons.right.color_rgb ] if is_number(hardware.buttons.right.color_rgb) else hardware.buttons.right.color_rgb }}'
+                                  background: []
+                                continue_on_error: true
+                              ### LABEL Font ###
+                              - *delay-default
+                              - service: '{{ nextion.command.text_printf }}'
+                                data:
+                                  component: entitypage01.right_bt_text
+                                  message: '{{ hardware.buttons.right.name }}'
+                                continue_on_error: true
+
+                          ##### SET Right Hardware Button PIC on Entity Page #####
+                          - if: '{{ right_button_state not in ["unavailable", "unknown", "", None] }}'
+                            then:
+                              # Hardware Button PIC
+                              - *delay-default
+                              - service: '{{ nextion.command.printf }}'
+                                data:
+                                  cmd: entitypage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                continue_on_error: true
 
                       ## PAGE WEATHER (WEATHER01 to WEATHER05) ##
                       - alias: Weather pages
@@ -9558,12 +9680,28 @@ action:
             data:
               cmd: 'home.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
             continue_on_error: true
+          - service: '{{ nextion.command.printf }}'
+            data:
+              cmd: 'buttonpage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
+            continue_on_error: true
+          - service: '{{ nextion.command.printf }}'
+            data:
+              cmd: 'entitypage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
+            continue_on_error: true
           - condition: '{{ trigger.to_state.state not in ["off", "closed", "closing", "on", "open", "closed"] }}'
           - delay:
               milliseconds: 800
           - service: '{{ nextion.command.printf }}'
             data:
               cmd: 'home.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val=0'
+            continue_on_error: true
+          - service: '{{ nextion.command.printf }}'
+            data:
+              cmd: 'buttonpage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val=0'
+            continue_on_error: true
+          - service: '{{ nextion.command.printf }}'
+            data:
+              cmd: 'entitypage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val=0'
             continue_on_error: true
 
       ##### OUTDOOR TEMP - entity #####
