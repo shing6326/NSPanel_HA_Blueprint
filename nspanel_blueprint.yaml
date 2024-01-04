@@ -6967,7 +6967,10 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: >
+                                    home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                    buttonpage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                    entitypage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
                                 continue_on_error: true
 
                           ##### NSPanel Right Button Name #####
@@ -6996,7 +6999,10 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: >
+                                    home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                    buttonpage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                    entitypage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
                                 continue_on_error: true
 
                           ###### Custom buttons ######
