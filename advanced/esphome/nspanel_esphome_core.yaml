@@ -1746,7 +1746,7 @@ script:
             disp1->send_command_printf("climateslider.maxval=%i", total_steps);
             disp1->set_component_value("temp_offset", temp_offset);
             disp1->set_component_value("temp_step", temp_step);
-            disp1->set_component_text_printf("current_temp", "%.1f°", current_temp);
+            //disp1->set_component_text_printf("current_temp", "%.1f°", current_temp);
             disp1->show_component("current_temp");
             disp1->show_component("current_icon");
             if (target_temp > -999)

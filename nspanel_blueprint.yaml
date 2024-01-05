@@ -951,6 +951,7 @@ blueprint:
                     - script
                     - fan
                     - media_player
+                    - climate
           left_button_name:
             name: Left hardware button name - LABEL (Optional)
             description: >
@@ -7041,7 +7042,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: home.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                           ##### NSPanel Right Button Name #####
@@ -7070,7 +7071,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: home.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                           ###### Custom buttons ######
@@ -7884,7 +7885,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: buttonpage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: buttonpage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                           ##### NSPanel Right Button Name #####
@@ -7913,7 +7914,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: buttonpage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: buttonpage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                       ## PAGE LIGHT ##
@@ -8640,7 +8641,8 @@ action:
                                   page: entitypage04
                                   component: value08
                           - variables:
-                              entity_page_index: '{{ (nspanel_event.page[-2:] | int(-1)) - 1 }}'
+                              event_page: '{{ nspanel_event.page if nspanel_event is defined and nspanel_event.page is defined else page.current }}'
+                              entity_page_index: '{{ (event_page[-2:] | int(-1)) - 1 }}'
                               first_entity: '{{ entity_page_index * 8 }}'
                               last_entity: '{{ first_entity + 8 }}'
                           ##### Entity page - Label #####
@@ -8715,7 +8717,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: entitypage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: entitypage01.left_bt_pic.val={{ 1 if left_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                           ##### NSPanel Right Button Name #####
@@ -8744,7 +8746,7 @@ action:
                               - *delay-default
                               - service: '{{ nextion.command.printf }}'
                                 data:
-                                  cmd: entitypage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}
+                                  cmd: entitypage01.right_bt_pic.val={{ 1 if right_button_state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}
                                 continue_on_error: true
 
                       ## PAGE WEATHER (WEATHER01 to WEATHER05) ##
@@ -9139,7 +9141,7 @@ action:
                           - choose:
                               - alias: Long click
                                 conditions:
-                                  - '{{ nspanel_event.command == "long_click" or entity_domain in ["climate", "media_player"] }}'
+                                  - '{{ nspanel_event.command == "long_click" or entity_domain in ["media_player"] }}'
                                 sequence:
                                   - choose:
                                       - alias: Default
@@ -9157,7 +9159,7 @@ action:
                                               page_icon: '{{ nextion.icon.domain[entity_domain] }}'
                                               page_icon_color: [-1 ] #No color set
                                               entity: '{{ "embedded_climate" if last_click_button.entity == thermostat_embedded else last_click_button.entity }}'
-                                              back_page: '{{ page.home }}'
+                                              back_page: '{{ nspanel_event.page }}'
                                             continue_on_error: true
                                       - alias: Custom action - Left
                                         conditions: '{{ last_click_button.hold_select == "Custom Action" and nspanel_event.component == "hw_bt_left" }}'
@@ -9167,7 +9169,7 @@ action:
                                         sequence: !input right_button_hold_custom_action
                               - alias: Short click
                                 conditions:
-                                  - '{{ nspanel_event.command == "short_click" and entity_domain not in ["climate", "media_player"] }}'
+                                  - '{{ nspanel_event.command == "short_click" and entity_domain not in ["media_player"] }}'
                                 sequence:
                                   - condition: '{{ last_click_button.entity | length > 0 }}'
                                   - condition: '{{ nspanel_event.component != "hw_bt_left" or hardware.buttons.left.entity != relay01_entity }}' ### Prevents blueprint control when locally controlled
@@ -9188,6 +9190,10 @@ action:
                                             {{ entity_domain }}.turn_on
                                           {% elif entity_domain in ["media_player"] %}
                                             {{ entity_domain }}.media_play_pause
+                                          {% elif entity_domain in ["climate"] and states(last_click_button.entity) in ["off"] %}
+                                            {{ entity_domain }}.turn_on
+                                          {% elif entity_domain in ["climate"] %}
+                                            {{ entity_domain }}.turn_off
                                           {% else %}
                                             homeassistant.update_entity
                                           {% endif %}
@@ -9752,17 +9758,17 @@ action:
           ##### SET hardware Button PIC on Home Page ####
           - service: '{{ nextion.command.printf }}'
             data:
-              cmd: 'home.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
+              cmd: 'home.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}'
             continue_on_error: true
           - service: '{{ nextion.command.printf }}'
             data:
-              cmd: 'buttonpage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
+              cmd: 'buttonpage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}'
             continue_on_error: true
           - service: '{{ nextion.command.printf }}'
             data:
-              cmd: 'entitypage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1] else 0 }}'
+              cmd: 'entitypage01.{{ "left" if trigger.id == "left_button_state" else "right"}}_bt_pic.val={{ 1 if trigger.to_state.state in ["on", "open", "opened", "opening", "true", true, 1, "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] else 0 }}'
             continue_on_error: true
-          - condition: '{{ trigger.to_state.state not in ["off", "closed", "closing", "on", "open", "closed"] }}'
+          - condition: '{{ trigger.to_state.state not in ["off", "closed", "closing", "on", "open", "closed", "auto", "cool", "dry", "fan_only", "heat", "heat_cool"] }}'
           - delay:
               milliseconds: 800
           - service: '{{ nextion.command.printf }}'
