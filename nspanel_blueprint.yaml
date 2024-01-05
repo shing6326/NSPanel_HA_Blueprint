@@ -5783,8 +5783,8 @@ variables:
       relative_day:
         today: 今天
         tomorrow: 明天
-        in_2_days: 後天
-        in_3_days: 大後天
+        in_2_days: 兩天後
+        in_3_days: 三天後
         in_4_days: 四天後
       climate:
         states:
