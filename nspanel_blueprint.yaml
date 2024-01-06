@@ -9141,7 +9141,7 @@ action:
                           - choose:
                               - alias: Long click
                                 conditions:
-                                  - '{{ nspanel_event.command == "long_click" or entity_domain in ["media_player"] }}'
+                                  - '{{ nspanel_event.command == "long_click" or entity_domain in ["media_player", "cover"] }}'
                                 sequence:
                                   - choose:
                                       - alias: Default
@@ -9169,7 +9169,7 @@ action:
                                         sequence: !input right_button_hold_custom_action
                               - alias: Short click
                                 conditions:
-                                  - '{{ nspanel_event.command == "short_click" and entity_domain not in ["media_player"] }}'
+                                  - '{{ nspanel_event.command == "short_click" and entity_domain not in ["media_player", "cover"] }}'
                                 sequence:
                                   - condition: '{{ last_click_button.entity | length > 0 }}'
                                   - condition: '{{ nspanel_event.component != "hw_bt_left" or hardware.buttons.left.entity != relay01_entity }}' ### Prevents blueprint control when locally controlled
