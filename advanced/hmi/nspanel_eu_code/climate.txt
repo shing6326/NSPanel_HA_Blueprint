@@ -486,7 +486,7 @@ Slider climateslider
             covx va0.val,target_temp.txt,0,0
             va0.val=temp_number.val%10
             covx va0.val,va1.txt,0,0
-            target_temp.txt+="."+va1.txt
+            target_temp.txt+="."+va1.txt+"°"
             timer01.en=1
             printh 91
             prints "touchevent",0

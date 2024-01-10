@@ -391,7 +391,7 @@ TouchCap swipe
             {
                 swipec=swipex-tch2
                 // From Left to Right
-                if(swipec>swipedx&&api==1)
+                if(swipec>swipedx)
                 {
                     page home
                 }
