@@ -100,7 +100,7 @@ Text left_bt_text
         Send Component ID  : on press and release
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text right_bt_text
     Attributes
@@ -110,7 +110,7 @@ Text right_bt_text
         Send Component ID  : on press and release
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text icon_top_01
     Attributes
@@ -596,29 +596,13 @@ TouchCap swipe
                 // From Left to Right
                 if(swipec>swipedx&&api==1)
                 {
-                    page buttonpage04
+                    page buttonpage01
                 }
                 // Right to Left
                 swipec2=0-swipedx
                 if(swipec<swipec2&&api==1)
                 {
-                    page buttonpage01
-                }
-            }
-            // Touch has ended, y
-            if(tch1==0)
-            {
-                swipec=swipey-tch3
-                // From Up to Down
-                if(swipec>100&&api==1)
-                {
-                    page buttonpage02
-                }
-                // Down to Up
-                swipec2=0-swipedy
-                if(swipec<-100&&api==1)
-                {
-                    page buttonpage03
+                    page entitypage01
                 }
             }
         

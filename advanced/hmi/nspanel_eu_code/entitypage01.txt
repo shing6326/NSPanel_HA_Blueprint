@@ -47,7 +47,7 @@ Text value01_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value05_label
     Attributes
@@ -57,7 +57,7 @@ Text value05_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value04_label
     Attributes
@@ -67,7 +67,7 @@ Text value04_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value02_label
     Attributes
@@ -77,7 +77,7 @@ Text value02_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value03_label
     Attributes
@@ -87,7 +87,7 @@ Text value03_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text entity01_label
     Attributes
@@ -97,7 +97,7 @@ Text entity01_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 30
+        Max. Text Size     : 60
     
 Text value06_label
     Attributes
@@ -107,7 +107,7 @@ Text value06_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value07_label
     Attributes
@@ -117,7 +117,7 @@ Text value07_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value08_label
     Attributes
@@ -127,7 +127,7 @@ Text value08_label
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 20
+        Max. Text Size     : 40
     
 Text value01_pic
     Attributes
@@ -217,7 +217,7 @@ Text value01
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value02
     Attributes
@@ -227,7 +227,7 @@ Text value02
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value03
     Attributes
@@ -237,7 +237,7 @@ Text value03
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value04
     Attributes
@@ -247,7 +247,7 @@ Text value04
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value05
     Attributes
@@ -257,7 +257,7 @@ Text value05
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value06
     Attributes
@@ -267,7 +267,7 @@ Text value06
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value07
     Attributes
@@ -277,7 +277,7 @@ Text value07
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text value08
     Attributes
@@ -287,11 +287,11 @@ Text value08
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 10
+        Max. Text Size     : 20
     
 Text page_index
     Attributes
-        ID                 : 29
+        ID                 : 28
         Scope              : local
         Dragging           : 0
         Send Component ID  : disabled
@@ -299,20 +299,46 @@ Text page_index
         Text               : 
         Max. Text Size     : 20
     
-Button button_back
+Text left_bt_text
     Attributes
-        ID               : 28
-        Scope            : local
-        Dragging         : 0
-        Send Component ID: disabled
-        State            : unpressed
-        Text             : 
-        Max. Text Size   : 3
+        ID                 : 30
+        Scope              : global
+        Dragging           : 0
+        Send Component ID  : on press and release
+        Associated Keyboard: none
+        Text               : 
+        Max. Text Size     : 40
     
-    Events
-        Touch Press Event
-            page home
-        
+Text right_bt_text
+    Attributes
+        ID                 : 31
+        Scope              : global
+        Dragging           : 0
+        Send Component ID  : on press and release
+        Associated Keyboard: none
+        Text               : 
+        Max. Text Size     : 40
+    
+Dual-state Button right_bt_pic
+    Attributes
+        ID               : 32
+        Scope            : global
+        Dragging         : 0
+        Send Component ID: on press and release
+        State            : unpressed
+        Text             : 
+        Max. Text Size   : 0
+    
+Dual-state Button left_bt_pic
+    Attributes
+        ID               : 33
+        Scope            : global
+        Dragging         : 0
+        Send Component ID: on press and release
+        State            : unpressed
+        Text             : 
+        Max. Text Size   : 0
+    
 Timer swipestore
     Attributes
         ID         : 2
@@ -327,7 +353,7 @@ Timer swipestore
         
 Timer wakeup_timer
     Attributes
-        ID         : 30
+        ID         : 29
         Scope      : local
         Period (ms): 100
         Enabled    : yes
@@ -365,31 +391,15 @@ TouchCap swipe
             {
                 swipec=swipex-tch2
                 // From Left to Right
-                if(swipec>swipedx)
+                if(swipec>swipedx&&api==1)
                 {
-                    page entitypage04
+                    page home
                 }
                 // Right to Left
                 swipec2=0-swipedx
-                if(swipec<swipec2)
+                if(swipec<swipec2&&api==1)
                 {
-                    page entitypage02
-                }
-            }
-            // Touch has ended, y
-            if(tch1==0)
-            {
-                swipec=swipey-tch3
-                // From Up to Down
-                if(swipec>100)
-                {
-                    page entitypage03
-                }
-                // Down to Up
-                swipec2=0-swipedy
-                if(swipec<-100)
-                {
-                    page entitypage04
+                    page buttonpage01
                 }
             }
         

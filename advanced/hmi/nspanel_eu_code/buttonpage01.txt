@@ -24,7 +24,6 @@ Page buttonpage01
                 printh 00
                 printh FF FF FF
                 vis 255,0
-                vis button_back,1
                 vis page_index,1
             }
         
@@ -51,21 +50,21 @@ Variable (string) lastclick
     
 Variable (string) click_comp
     Attributes
-        ID            : 47
+        ID            : 46
         Scope         : local
         Text          : 
         Max. Text Size: 8
     
 Variable (string) page_name
     Attributes
-        ID            : 49
+        ID            : 48
         Scope         : local
         Text          : buttonpage01
         Max. Text Size: 12
     
 Variable (int32) confirm
     Attributes
-        ID   : 51
+        ID   : 50
         Scope: local
         Value: 0
     
@@ -77,7 +76,7 @@ Text button01text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button01bri
     Attributes
@@ -97,7 +96,7 @@ Text button02text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button02bri
     Attributes
@@ -117,7 +116,7 @@ Text button03text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button03bri
     Attributes
@@ -137,7 +136,7 @@ Text button04text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button04bri
     Attributes
@@ -157,7 +156,7 @@ Text button05text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button05bri
     Attributes
@@ -177,7 +176,7 @@ Text button06text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button06bri
     Attributes
@@ -197,7 +196,7 @@ Text button07text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button07bri
     Attributes
@@ -217,7 +216,7 @@ Text button08text
         Send Component ID  : disabled
         Associated Keyboard: none
         Text               : 
-        Max. Text Size     : 22
+        Max. Text Size     : 44
     
 Text button08bri
     Attributes
@@ -329,6 +328,26 @@ Text page_index
         Text               : 
         Max. Text Size     : 20
     
+Text right_bt_text
+    Attributes
+        ID                 : 51
+        Scope              : global
+        Dragging           : 0
+        Send Component ID  : on press and release
+        Associated Keyboard: none
+        Text               : 
+        Max. Text Size     : 40
+    
+Text left_bt_text
+    Attributes
+        ID                 : 52
+        Scope              : global
+        Dragging           : 0
+        Send Component ID  : on press and release
+        Associated Keyboard: none
+        Text               : 
+        Max. Text Size     : 40
+    
 Picture button01pic
     Attributes
         ID               : 3
@@ -385,20 +404,26 @@ Picture button08pic
         Dragging         : 0
         Send Component ID: disabled
     
-Button button_back
+Dual-state Button left_bt_pic
     Attributes
-        ID               : 46
-        Scope            : local
+        ID               : 53
+        Scope            : global
         Dragging         : 0
-        Send Component ID: disabled
+        Send Component ID: on press and release
         State            : unpressed
-        Text             : 
-        Max. Text Size   : 3
+        Text             : 
+        Max. Text Size   : 0
     
-    Events
-        Touch Press Event
-            page home
-        
+Dual-state Button right_bt_pic
+    Attributes
+        ID               : 54
+        Scope            : global
+        Dragging         : 0
+        Send Component ID: on press and release
+        State            : unpressed
+        Text             : 
+        Max. Text Size   : 0
+    
 Hotspot button01
     Attributes
         ID               : 36
@@ -701,7 +726,7 @@ Timer swipestore
         
 Timer click_timer
     Attributes
-        ID         : 48
+        ID         : 47
         Scope      : local
         Period (ms): 800
         Enabled    : no
@@ -719,7 +744,7 @@ Timer click_timer
         
 Timer wakeup_timer
     Attributes
-        ID         : 50
+        ID         : 49
         Scope      : local
         Period (ms): 100
         Enabled    : yes
@@ -757,31 +782,15 @@ TouchCap swipe
             {
                 swipec=swipex-tch2
                 // From Left to Right
-                if(swipec>swipedx)
+                if(swipec>swipedx&&api==1)
                 {
-                    page home
+                    page entitypage01
                 }
                 // Right to Left
                 swipec2=0-swipedx
-                if(swipec<swipec2)
+                if(swipec<swipec2&&api==1)
                 {
-                    page buttonpage02
-                }
-            }
-            // Touch has ended, y
-            if(tch1==0)
-            {
-                swipec=swipey-tch3
-                // From Up to Down
-                if(swipec>100)
-                {
-                    //page
-                }
-                // Down to Up
-                swipec2=0-swipedy
-                if(swipec<-100)
-                {
-                    //page
+                    page home
                 }
             }
         

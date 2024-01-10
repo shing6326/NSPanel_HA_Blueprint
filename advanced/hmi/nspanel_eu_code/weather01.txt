@@ -203,7 +203,7 @@ Button button_back
         Dragging         : 0
         Send Component ID: disabled
         State            : unpressed
-        Text             : 
+        Text             : î
         Max. Text Size   : 3
     
     Events

@@ -441,7 +441,7 @@ Button button_back
         Dragging         : 0
         Send Component ID: disabled
         State            : unpressed
-        Text             : 
+        Text             : î
         Max. Text Size   : 3
     
     Events
@@ -458,6 +458,9 @@ Button button_back
             }else if(back_page.txt=="buttonpage04")
             {
                 page buttonpage04
+            }else if(back_page.txt=="entitypage01")
+            {
+                page entitypage01
             }else
             {
                 page home
