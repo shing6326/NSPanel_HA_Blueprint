@@ -1753,7 +1753,7 @@ script:
               {
                 float slider_val = round(((10*target_temp) - temp_offset) / temp_step);
                 disp1->set_component_value("climateslider", slider_val);
-                disp1->set_component_text_printf("target_temp", "%d°", target_temp);
+                disp1->set_component_text_printf("target_temp", "%.0f°", target_temp);
                 disp1->set_component_text_printf("target_icon", "%s", climate_icon.c_str());
                 disp1->show_component("target_icon");
                 disp1->show_component("target_temp");
