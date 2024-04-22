@@ -9177,28 +9177,37 @@ action:
                                   - &short_press-service_call
                                     if: '{{ true }}'
                                     then:
-                                      - service: >
-                                          {% if entity_domain in ["cover"] and states(last_click_button.entity) in ["opening", "closing"] and state_attr(last_click_button.entity, "supported_features") | int(0) | bitwise_and(4) == 0 %}
-                                            {{ entity_domain }}.stop_cover
-                                          {% elif entity_domain in ["light", "switch", "cover", "input_boolean", "fan"] %}
-                                            {{ entity_domain }}.toggle
-                                          {% elif entity_domain in ["automation"] %}
-                                            {{ entity_domain }}.trigger
-                                          {% elif entity_domain in ["button", "input_button"] %}
-                                            {{ entity_domain }}.press
-                                          {% elif entity_domain in ["scene", "script"] %}
-                                            {{ entity_domain }}.turn_on
-                                          {% elif entity_domain in ["media_player"] %}
-                                            {{ entity_domain }}.media_play_pause
-                                          {% elif entity_domain in ["climate"] and states(last_click_button.entity) in ["off"] %}
-                                            {{ entity_domain }}.turn_on
-                                          {% elif entity_domain in ["climate"] %}
-                                            {{ entity_domain }}.turn_off
-                                          {% else %}
-                                            homeassistant.update_entity
-                                          {% endif %}
-                                        data:
-                                          entity_id: '{{ last_click_button.entity }}'
+                                      - choose:
+                                          - conditions: '{{ entity_domain == "climate" and states(last_click_button.entity) == "off" }}'
+                                            sequence:
+                                              - service: climate.set_hvac_mode
+                                                data:
+                                                  entity_id: '{{ last_click_button.entity }}'
+                                                  hvac_mode: 'cool'
+                                          - conditions: '{{ entity_domain == "climate" }}'
+                                            sequence:
+                                              - service: climate.turn_off
+                                                data:
+                                                  entity_id: '{{ last_click_button.entity }}'
+                                        default:
+                                          - service: >
+                                              {% if entity_domain in ["cover"] and states(last_click_button.entity) in ["opening", "closing"] and state_attr(last_click_button.entity, "supported_features") | int(0) | bitwise_and(4) == 0 %}
+                                                {{ entity_domain }}.stop_cover
+                                              {% elif entity_domain in ["light", "switch", "cover", "input_boolean", "fan"] %}
+                                                {{ entity_domain }}.toggle
+                                              {% elif entity_domain in ["automation"] %}
+                                                {{ entity_domain }}.trigger
+                                              {% elif entity_domain in ["button", "input_button"] %}
+                                                {{ entity_domain }}.press
+                                              {% elif entity_domain in ["scene", "script"] %}
+                                                {{ entity_domain }}.turn_on
+                                              {% elif entity_domain in ["media_player"] %}
+                                                {{ entity_domain }}.media_play_pause
+                                              {% else %}
+                                                homeassistant.update_entity
+                                              {% endif %}
+                                            data:
+                                              entity_id: '{{ last_click_button.entity }}'
                                         continue_on_error: true
                           - if: '{{ entity_domain in ["media_player"] }}'
                             then:
